@@ -18,7 +18,7 @@ services:
     name: aeri-logistics-frontend
     runtime: static
     rootDir: frontend
-    buildCommand: npm run build
+    buildCommand: npm install --legacy-peer-deps && npm run build
     staticPublishPath: build
     envVars:
       - key: REACT_APP_BACKEND_URL
