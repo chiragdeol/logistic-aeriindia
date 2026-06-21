@@ -22,4 +22,3 @@ services:
     envVars:
       - key: REACT_APP_BACKEND_URL
         value: https://aeri-logistics-backend.onrender.com
-        sync: false
