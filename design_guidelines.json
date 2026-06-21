@@ -1,0 +1,75 @@
+{
+  "theme": "light",
+  "archetype": "4 (Swiss & High-Contrast)",
+  "colors": {
+    "primary": "#0f172a",
+    "primary_foreground": "#ffffff",
+    "secondary": "#f1f5f9",
+    "secondary_foreground": "#0f172a",
+    "accent": "#2563eb",
+    "accent_foreground": "#ffffff",
+    "destructive": "#ef4444",
+    "background": "#ffffff",
+    "surface": "#f8fafc",
+    "border": "#e2e8f0",
+    "text_main": "#0f172a",
+    "text_muted": "#64748b"
+  },
+  "typography": {
+    "headings": "Cabinet Grotesk",
+    "body": "IBM Plex Sans",
+    "data_display": "JetBrains Mono",
+    "scale": {
+      "h1": "text-4xl tracking-tight font-bold",
+      "h2": "text-2xl tracking-tight font-semibold",
+      "h3": "text-xl tracking-tight font-medium",
+      "body": "text-sm md:text-base",
+      "small": "text-xs tracking-wider uppercase",
+      "data": "text-sm font-mono"
+    }
+  },
+  "layout": {
+    "spacing": "Generous spacing for containers (p-8 to p-12), dense spacing for data tables and inputs (p-2 to p-4).",
+    "grid": "Control Room Grid (Mode B). Tight gap-4 to gap-6. Left column for inputs, right column for rate breakdown results.",
+    "radius": "rounded-sm (Subtle roundness, max 4px border-radius for technical/business feel)",
+    "shadows": "Minimal. 1px solid borders preferred over soft shadows. Use shadow-sm for active states."
+  },
+  "components": {
+    "login_page": "Split screen layout. Left side: immersive background image with brand overlay. Right side: stark white login form with solid borders.",
+    "calculator_form": "Grid-based form layout. Inputs should use Shadcn Select/Input with sharp borders. Clear grouping of dimensions vs weight.",
+    "rate_breakdown": "Tabular or receipt-style list. Distinct rows for Base Rate, ESS Fee, Fuel Surcharge, GST, Margin, Total. Highlight the Total INR in a high-contrast accent box (e.g., Deep Navy background with White text).",
+    "admin_settings": "Slide-out drawer or clean modal (Shadcn Sheet/Dialog) for setting surcharges (Fuel, GST, Margin) without leaving the context.",
+    "country_table": "Data-dense Shadcn Table component. Sticky header, scrollable body. Pagination if 225+ rows.",
+    "buttons": "Sharp corners or rounded-sm. Solid colors. Hover state should darken the primary color and keep text readable."
+  },
+  "motion": {
+    "transitions": "Fast and snappy. 150ms ease-in-out for hover states. No bouncy animations. Serious B2B feel.",
+    "loading": "Skeleton loaders for calculation results, not spinners."
+  },
+  "assets": {
+    "images": [
+      {
+        "category": "login_background",
+        "url": "https://static.prod-images.emergentagent.com/jobs/489c1699-5f81-40b1-99d0-8ece1d53fcdb/images/8ac90d8c3d16865daf27b99695455887ee3f85d97c59e92c3ce7f17248522bbe.png",
+        "description": "Abstract global logistics network map for the left side of the login page."
+      },
+      {
+         "category": "port_cargo_accent",
+         "url": "https://images.unsplash.com/photo-1634638022229-5a52221886dc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHwxfHxjYXJnbyUyMHNoaXAlMjBjb250YWluZXJzJTIwcG9ydHxlbnwwfHx8fDE3NzcwMjQyMjF8MA&ixlib=rb-4.1.0&q=85",
+         "description": "Cargo ship in port, can be used as an alternate background or hero banner inside the admin context."
+      }
+    ],
+    "icons": "lucide-react"
+  },
+  "instructions_to_main_agent": [
+    "Build a React single-page app containing a Login screen and a protected Dashboard (Calculator + Admin).",
+    "Implement the UI using Shadcn components customized with a rigid, high-contrast B2B aesthetic (Archetype 4).",
+    "Avoid using generic purple or teal. Stick to Deep Navy, Stark White, and Signal Blue/Red accents.",
+    "The Rate Calculator must have inputs for Destination Country (searchable dropdown), Weight (kg), Shipment Type (Document/Non-Document), and Dimensions.",
+    "The Results view should look like a professional logistics quote/receipt, clearly breaking down Base Rate, ESS, Fuel (47.75%), GST (18%), Local charges, Margin, and Final Total.",
+    "Include an Admin settings panel (via Dialog or Sheet) allowing users to configure these percentages.",
+    "Include a Country-to-Zone reference table view to show the underlying routing data.",
+    "Ensure all interactive elements have data-testid attributes (e.g., data-testid='calculate-rate-button').",
+    "Do NOT use placeholder images. Use the provided login_background for the login page."
+  ]
+}

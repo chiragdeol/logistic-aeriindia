@@ -1,0 +1,340 @@
+{
+  "zone_guide": {
+    "ZONE 1": [
+      "Bangladesh",
+      "Nepal",
+      "Sri Lanka"
+    ],
+    "ZONE 2": [
+      "Macau",
+      "Taiwan",
+      "Vietnam"
+    ],
+    "ZONE 3": [
+      "Bahrain",
+      "Jordan",
+      "Kuwait",
+      "Lebanon",
+      "Oman",
+      "Pakistan",
+      "Qatar",
+      "Saudi Arabia"
+    ],
+    "ZONE 4": [
+      "Andorra",
+      "San Marino"
+    ],
+    "ZONE 5": [
+      "Country wise"
+    ],
+    "ZONE 6": [
+      "Guernsey",
+      "Jersey",
+      "Saipan"
+    ],
+    "ZONE 7": [
+      "Algeria",
+      "Benin",
+      "Bhutan",
+      "Botswana",
+      "Brunei",
+      "Burkina Faso",
+      "Burundi",
+      "Cambodia",
+      "Central African Rep",
+      "Chad",
+      "Cook Isl",
+      "Ethiopia",
+      "French Polynesia",
+      "Gabon",
+      "Ghana",
+      "Guam",
+      "Guinea Rep",
+      "Guinea-Bissau",
+      "Kenya",
+      "Kiribati",
+      "Laos",
+      "Lesotho",
+      "Liberia",
+      "Madagascar",
+      "Malawi",
+      "Mali",
+      "Marshal Isl",
+      "Mauritania",
+      "Micronesia",
+      "Mongolia",
+      "Morocco",
+      "Mozambique",
+      "Myanmar",
+      "Namibia",
+      "Nigeria",
+      "Palau",
+      "Papua New Guinea",
+      "Rwanda",
+      "Senegal",
+      "Soloman Isl",
+      "South Africa",
+      "Swaziland",
+      "Tanzania",
+      "Timor Leste",
+      "Togo",
+      "Tonga",
+      "Tunisia",
+      "Tuvalu",
+      "Uganda",
+      "Vanuatu",
+      "Wallis & Futuna Isl",
+      "Zambia",
+      "Zimbabwe"
+    ],
+    "ZONE 8": [
+      "Czech Rep",
+      "Hungary",
+      "Poland"
+    ],
+    "ZONE 9": [
+      "Anguilla",
+      "Antigua & Barbados",
+      "Barbados",
+      "Belize",
+      "Bonaire",
+      "Brazil",
+      "Cayman Isl",
+      "Chile",
+      "Colombia",
+      "Cuba",
+      "Dominica",
+      "Dominican Rep",
+      "Ecuador",
+      "El Salvador",
+      "Honduras",
+      "Montserrat",
+      "Nicaragua",
+      "Peru",
+      "St Kitts & Nevis",
+      "St Vincent & Grenadi",
+      "St Martin",
+      "St Mateen",
+      "Turks & Caicos Isl",
+      "Venezuela"
+    ],
+    "ZONE 10": [
+      "Albania",
+      "Armenia",
+      "Belarus",
+      "Bosnia & Herzegovina",
+      "Croatia",
+      "Estonia",
+      "Georgia",
+      "Kosovo",
+      "Latvia",
+      "Lithuania",
+      "Macedonia",
+      "Moldova",
+      "Montenegro",
+      "Serbia Montenegro",
+      "Slovenia",
+      "Ukraine"
+    ],
+    "ZONE 11": [
+      "Maldives",
+      "Mauritius",
+      "New Caledonia"
+    ],
+    "ZONE 12": [
+      "Argentina",
+      "Aruba",
+      "Bahamas",
+      "Bermuda",
+      "Bolivia",
+      "British Virgin Isl",
+      "Costa Rica",
+      "Curacao",
+      "Grenada",
+      "Guadeloupe",
+      "Guatemala",
+      "Guyana",
+      "Haiti",
+      "Jamaica",
+      "Martinique",
+      "Panama",
+      "Paraguay",
+      "St Barthelemy",
+      "St Lucia",
+      "Suriname",
+      "Trinidad & Tobago",
+      "US Virgin Isl",
+      "Uruguay"
+    ],
+    "ZONE 13": [
+      "Bulgaria",
+      "Cyprus",
+      "Gibraltar",
+      "Iceland",
+      "Malta",
+      "Romania",
+      "Slovakia",
+      "Turkey"
+    ],
+    "ZONE 14": [
+      "Angola",
+      "Azerbaijan",
+      "Cape Verde",
+      "Comoros",
+      "Equatorial Guinea",
+      "Eritrea",
+      "Faroe Isl",
+      "Greenland",
+      "Kazakhstan",
+      "Kyrgyzstan",
+      "Mayotte",
+      "Tajikistan",
+      "Uzbekistan"
+    ],
+    "ZONE 15": [
+      "American Samoa",
+      "Cameroon",
+      "Congo",
+      "Djibouti",
+      "Gambia",
+      "Ivory Coast",
+      "Niger",
+      "Reunion Isl",
+      "Seychelles",
+      "Sierra Leone",
+      "Samoa",
+      "St Croix",
+      "St Eustatius",
+      "St John",
+      "St Kitts & Nevis",
+      "St Martin",
+      "St Marteen",
+      "St Thomas",
+      "St Vincent & Grenadi",
+      "Tahiti",
+      "Tortola",
+      "Truk",
+      "Turks & Caicas Island",
+      "Venezuela",
+      "Yap",
+      "Zaire"
+    ]
+  },
+  "columns": {
+    "1": [
+      "ZONE 7",
+      "REST OF WORLD COUNTRIES"
+    ],
+    "2": [
+      "ZONE 8"
+    ],
+    "3": [
+      "0.5025",
+      "ZONE 9"
+    ],
+    "4": [
+      "USA"
+    ],
+    "5": [
+      "Canada"
+    ],
+    "6": [
+      "Mexico",
+      "Puerto Rico"
+    ],
+    "7": [
+      "Germany"
+    ],
+    "8": [
+      "Belgium",
+      "Netherlands",
+      "Luxembourg"
+    ],
+    "9": [
+      "UK"
+    ],
+    "10": [
+      "Denmark",
+      "France",
+      "Italy",
+      "Spain"
+    ],
+    "11": [
+      "Austria",
+      "Ireland",
+      "Portugal",
+      "Sweden"
+    ],
+    "12": [
+      "Norway ",
+      "Finland",
+      "Greece"
+    ],
+    "13": [
+      "Japan",
+      "South Korea"
+    ],
+    "14": [
+      "Hong Kong",
+      "Singapore",
+      "Malaysia",
+      "Thailand"
+    ],
+    "15": [
+      "Australia"
+    ],
+    "16": [
+      "New Zealand"
+    ],
+    "17": [
+      "ZONE 1"
+    ],
+    "18": [
+      "ZONE 2"
+    ],
+    "19": [
+      "ZONE 3"
+    ],
+    "20": [
+      "ZONE 4"
+    ],
+    "21": [
+      "ZONE 6"
+    ],
+    "22": [
+      "ZONE 10"
+    ],
+    "23": [
+      "ZONE 11"
+    ],
+    "24": [
+      "ZONE 12"
+    ],
+    "25": [
+      "Israel"
+    ],
+    "26": [
+      "zone-13"
+    ],
+    "27": [
+      "Egypt"
+    ],
+    "28": [
+      "FRENCH GUINEA"
+    ],
+    "29": [
+      "UAE"
+    ],
+    "30": [
+      "China",
+      "Indonesia",
+      "Philipines"
+    ],
+    "31": [
+      "zone-14"
+    ],
+    "32": [
+      "zone-15"
+    ]
+  }
+}

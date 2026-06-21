@@ -1,0 +1,36 @@
+{
+  "summary": "Iteration 2 — FedEx calculator added alongside DHL. Backend pytest: 26/26 passed (15 pre-existing DHL tests still green + 11 new FedEx tests covering countries list, settings persistence, USA package 5kg, UK envelope 0.5kg, per-quote overrides ess_rate/ess_qty/fuel_pct/margin, 75kg multiplier, envelope→package auto-switch at 3kg, unknown country 404, auth gating). Frontend Playwright: all 7 critical flows passed — login, carrier toggle (DHL yellow / FedEx purple), FedEx form rendering with admin defaults pre-filled (94/15/46.5/1500), country dropdown search & select USA, breakdown panel showing total ₹11,174.10, override fuel% 60 changes total to ₹12,048.99, switch back to DHL without crash, settings sheet has both 'DHL SETTINGS' and 'FEDEX DEFAULTS' sections with all 8 expected fields. DHL regression intact: USA 5kg nondoc still returns total > 0 with zone 12 and all expected breakdown fields.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "server.py _fedex_demand_surcharge: dict iteration order matters because zones overlap is impossible across keys, but using dict ordering is fragile. Acceptable since FEDEX_DEMAND_MAP is small and zones are partitioned, but a defensive fall-through to ROW is already coded.",
+    "FedexCalcRequest accepts service via regex pattern but client may send 'envelope' for >2.5kg — handled gracefully by switching to package and adding a note (good UX).",
+    "FedExBreakdown does not include a `clearance_charge` field even though Settings has fedex_clearance_charge=2500. Confirm whether clearance is intentionally excluded from per-shipment FedEx total or should be added — currently it is unused in the calculate path.",
+    "Settings model exposes fedex_gst_pct (default 18.0) but not editable in UI SettingsSheet (only listed fedex_* fields are ess_rate, ess_qty, fuel, local_charge, margin, clearance_charge). If admin intends to vary FedEx GST separately from DHL GST, add it to the sheet; otherwise consider removing the duplicate field.",
+    "JWT_SECRET still has a fallback default (low risk for dev).",
+    "CORS allow_origins='*' with allow_credentials=True still present (acceptable since auth is Bearer token, not cookies)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py"
+  ],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "admin@aeriindia.in / Aeri@2026 (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "None. Admin user + default settings (incl. fedex_*) auto-seeded on backend startup.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "26 pytest tests in /app/backend/tests/backend_test.py cover both DHL and FedEx flows. FedEx confirmed values: USA 5kg package with defaults → ₹11,174.10; with fuel 60% override → ₹12,048.99. FedEx login uses data-testid login-email-input/login-password-input/login-submit-button (NOT email-input). FedEx pre-fills from /api/settings — must wait for state load before reading input_value (use page.wait_for_function on the input value). Country option testids use the raw name e.g. fedex-country-option-USA. Settings sheet field testids follow pattern settings-{key}-input where {key} is the python field name (e.g. settings-fedex_ess_rate-input).",
+  "rca of the issue": "N/A — no bugs found."
+}
