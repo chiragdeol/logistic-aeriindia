@@ -18,8 +18,10 @@ services:
     name: aeri-logistics-frontend
     runtime: static
     rootDir: frontend
-    buildCommand: npm install --legacy-peer-deps && npm run build
+    buildCommand: npm run build
     staticPublishPath: build
     envVars:
       - key: REACT_APP_BACKEND_URL
         value: https://aeri-logistics-backend.onrender.com
+      - key: NPM_CONFIG_LEGACY_PEER_DEPS
+        value: "true"
