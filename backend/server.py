@@ -754,13 +754,14 @@ async def fedex_calculate(req: FedexCalcRequest, user: dict = Depends(get_curren
     # Demand surcharge (per kg, region-based) - Disabled per user request
     demand = 0.0
 
-    # All variables come from admin settings (with per-quote overrides from request)
     if req.ess_rate is not None:
         ess_rate = req.ess_rate
     else:
-        country_lower = country['name'].lower().strip()
-        if country_lower in ("usa", "united states", "united states of america", "canada") or "u.s.a" in country_lower or country_lower.startswith("usa"):
-            ess_rate = 134.0
+        zone_upper = country['zone'].upper().strip()
+        if zone_upper in ("G", "L"):
+            ess_rate = 132.0
+        elif zone_upper == "E":
+            ess_rate = 0.0
         else:
             ess_rate = settings.fedex_ess_rate
     ess_qty = req.ess_qty if req.ess_qty is not None else settings.fedex_ess_qty

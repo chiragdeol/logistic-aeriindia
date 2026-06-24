@@ -127,7 +127,7 @@ export default function Breakdown({ data, customerName }) {
       </div>
 
       {data.notes?.length > 0 && (
-        <div className="px-5 sm:px-6 py-3 space-y-1.5 bg-slate-50" data-testid="breakdown-notes">
+        <div className="px-5 sm:px-6 py-3 space-y-1.5 bg-slate-50 border-b border-slate-100" data-testid="breakdown-notes">
           {data.notes.map((n, i) => (
             <div key={i} className="flex items-start gap-2 text-[11px] text-slate-500 leading-relaxed">
               <Info className="w-3 h-3 mt-0.5 flex-shrink-0 text-blue-600" />
@@ -136,6 +136,15 @@ export default function Breakdown({ data, customerName }) {
           ))}
         </div>
       )}
+
+      <div className="px-5 sm:px-6 py-4 bg-slate-50 border-t border-slate-100" data-testid="general-remarks">
+        <div className="text-[10px] tracking-[0.2em] uppercase font-semibold text-slate-500 mb-2">Remark</div>
+        <ol className="list-decimal list-inside text-[11px] text-slate-600 space-y-1.5 leading-relaxed font-sans">
+          <li>Commercial charges 3540/- extra if any</li>
+          <li>Weight above 24 kgs charge extra approx 3390/- per crtn</li>
+          <li>Oda / remote area charges applicable .</li>
+        </ol>
+      </div>
     </div>
   );
 }

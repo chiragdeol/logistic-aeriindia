@@ -230,7 +230,7 @@ class TestFedexCalculate:
             assert k in d
         assert d["total"] > 0
         # default ess values
-        assert d["ess_rate"] == 134.0
+        assert d["ess_rate"] == 132.0
         assert d["ess_qty"] == 15.0
         assert d["margin"] == 1500.0
         assert d["fuel_surcharge_pct"] == 46.5
