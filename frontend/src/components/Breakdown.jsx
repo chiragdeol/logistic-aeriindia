@@ -143,6 +143,7 @@ export default function Breakdown({ data, customerName }) {
           <li>Commercial charges 3540/- extra if any</li>
           <li>Weight above 24 kgs charge extra approx 3390/- per crtn</li>
           <li>Oda / remote area charges applicable .</li>
+          <li>Validity of rate one week</li>
         </ol>
       </div>
     </div>

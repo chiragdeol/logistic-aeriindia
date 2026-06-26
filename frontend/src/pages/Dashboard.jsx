@@ -67,7 +67,7 @@ export default function Dashboard() {
 
   const [countryOpen, setCountryOpen] = useState(false);
   const [adminOpen, setAdminOpen] = useState(false);
-  const [carrier, setCarrier] = useState("both"); // default: both
+  const [carrier, setCarrier] = useState("dhl"); // default: dhl
 
   const getSelfServices = (countryCode) => {
     const cc = countryCode?.toUpperCase() || "";
@@ -528,18 +528,6 @@ export default function Dashboard() {
         {/* Carrier toggle */}
         <div className="flex items-center gap-2 flex-wrap" data-testid="carrier-toggle">
           <span className="text-[10px] tracking-[0.25em] uppercase text-slate-500 mr-2">Carrier</span>
-          <button
-            type="button"
-            onClick={() => switchCarrier("both")}
-            className={cn(
-              "inline-flex items-center gap-1.5 px-4 py-1.5 text-xs tracking-wider uppercase rounded-sm border transition-colors",
-              carrier === "both" ? "bg-slate-900 text-white border-slate-900 font-semibold" : "bg-white text-slate-600 border-slate-300 hover:border-slate-500"
-            )}
-            data-testid="carrier-both"
-          >
-            <Sparkles className="w-3 h-3" />
-            Compare
-          </button>
           <button
             type="button"
             onClick={() => switchCarrier("dhl")}
