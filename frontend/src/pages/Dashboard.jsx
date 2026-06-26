@@ -121,17 +121,6 @@ export default function Dashboard() {
     const w = parseFloat(weight);
     if (!w || w <= 0) return toast.error("Enter a valid weight");
 
-    if (["AU", "CA", "NZ", "US", "GB"].includes(countryCode.toUpperCase())) {
-      if (!selfPostcode?.trim()) {
-        const label = countryCode.toUpperCase() === "US" ? "ZIP Code" : countryCode.toUpperCase() === "CA" ? "FSA" : "Postcode";
-        return toast.error(`${label} is required`);
-      }
-      if (!["CA", "US", "GB"].includes(countryCode.toUpperCase()) && !selfSuburb?.trim()) {
-        const label = countryCode.toUpperCase() === "NZ" ? "Town" : "Suburb";
-        return toast.error(`${label} is required`);
-      }
-    }
-
     setCalculating(true);
     resetResults();
     try {
@@ -140,8 +129,8 @@ export default function Dashboard() {
         country_code: countryCode,
         weight_kg: w,
         shipment_type: shipmentType,
-        postcode: selfPostcode?.trim() || null,
-        suburb: selfSuburb?.trim() || null,
+        postcode: null,
+        suburb: null,
         self_service_code: selfServiceCode || null,
       });
       setBothResult(res.data);
@@ -282,40 +271,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        {countryCode && ["AU", "CA", "NZ", "US", "GB"].includes(countryCode.toUpperCase()) && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <Label htmlFor="self-postcode" className="text-xs tracking-wider uppercase text-slate-600">
-                {countryCode?.toUpperCase() === "CA" ? "FSA (First 3 chars)" : countryCode?.toUpperCase() === "US" ? "ZIP Code" : "Postcode"} <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="self-postcode"
-                type="text"
-                required
-                value={selfPostcode}
-                onChange={(e) => setSelfPostcode(e.target.value)}
-                placeholder={countryCode?.toUpperCase() === "CA" ? "e.g. L0A" : countryCode?.toUpperCase() === "US" ? "e.g. 90210" : "e.g. 2000"}
-                className="rounded-sm h-11 border-slate-300 font-mono"
-              />
-            </div>
-            {countryCode?.toUpperCase() !== "CA" && countryCode?.toUpperCase() !== "US" && countryCode?.toUpperCase() !== "GB" && (
-              <div className="space-y-1.5">
-                <Label htmlFor="self-suburb" className="text-xs tracking-wider uppercase text-slate-600">
-                  {countryCode?.toUpperCase() === "NZ" ? "Town" : "Suburb"} <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="self-suburb"
-                  type="text"
-                  required
-                  value={selfSuburb}
-                  onChange={(e) => setSelfSuburb(e.target.value)}
-                  placeholder={countryCode?.toUpperCase() === "NZ" ? "e.g. Kamo" : "e.g. Alawa"}
-                  className="rounded-sm h-11 border-slate-300"
-                />
-              </div>
-            )}
-          </div>
-        )}
+        {/* Postcode/Suburb inputs removed per user request */}
 
         {carrier !== "self" && (
           <div className="space-y-1.5">
