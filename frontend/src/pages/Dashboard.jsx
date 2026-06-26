@@ -640,7 +640,7 @@ export default function Dashboard() {
                   <EmptyState label="All carrier quotes will appear side-by-side" />
                 ) : (
                   <div className="space-y-4">
-                    <ComparisonBar bothResult={bothResult} />
+                    {/* <ComparisonBar bothResult={bothResult} /> */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4" data-testid="both-results">
                       <div>
                         {bothResult.dhl ? (

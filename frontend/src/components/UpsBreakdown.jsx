@@ -17,6 +17,8 @@ const Row = ({ label, value, sub, bold }) => (
 export default function UpsBreakdown({ data, customerName }) {
   if (!data) return null;
 
+  const showBifurcation = false;
+
   return (
     <div className="rounded-md bg-white border border-slate-200 shadow-sm overflow-hidden" data-testid="ups-breakdown">
       {/* Header strip */}
@@ -59,47 +61,66 @@ export default function UpsBreakdown({ data, customerName }) {
       </div>
 
       {/* Rate breakdown rows */}
-      <div className="px-5 sm:px-6 py-3 space-y-0" data-testid="ups-breakdown-rows">
-        {data.per_kg_mode && (
-          <div className="py-2 text-[10px] tracking-[0.2em] uppercase text-amber-700 bg-amber-50 -mx-5 sm:-mx-6 px-5 sm:px-6 border-b border-amber-100 mb-2">
-            Per-kg breakdown · all amounts below are per kg
-          </div>
-        )}
-        <Row label="Base Rate (All-In)"
-          sub={data.per_kg_mode
-            ? `₹${(data.subtotal_3 / data.chargeable_weight).toFixed(2)}/kg`
-            : `UPS columns`}
-          value={data.per_kg_mode ? fmt(data.subtotal_3 / data.chargeable_weight) + "/kg" : fmt(data.subtotal_3)}
-        />
-        <Row label="Local Charge" value={data.per_kg_mode ? fmt(data.local_charge) + "/kg" : fmt(data.local_charge)} />
-        <Row label="Margin" value={data.per_kg_mode ? fmt(data.margin) + "/kg" : fmt(data.margin)} />
-        {data.per_kg_mode && (
-          <>
-            <Row label="Per-kg Total" value={fmt(data.total_per_kg) + "/kg"} bold />
-            <Row label="× Chargeable Weight" sub={`${data.total_per_kg.toFixed(2)} × ${data.chargeable_weight} kg`} value={fmt(data.total_per_kg * data.chargeable_weight)} />
-          </>
-        )}
-      </div>
+      {showBifurcation && (
+        <div className="px-5 sm:px-6 py-3 space-y-0" data-testid="ups-breakdown-rows">
+          {data.per_kg_mode && (
+            <div className="py-2 text-[10px] tracking-[0.2em] uppercase text-amber-700 bg-amber-50 -mx-5 sm:-mx-6 px-5 sm:px-6 border-b border-amber-100 mb-2">
+              Per-kg breakdown · all amounts below are per kg
+            </div>
+          )}
+          <Row label="Base Rate (All-In)"
+            sub={data.per_kg_mode
+              ? `₹${(data.subtotal_3 / data.chargeable_weight).toFixed(2)}/kg`
+              : `UPS columns`}
+            value={data.per_kg_mode ? fmt(data.subtotal_3 / data.chargeable_weight) + "/kg" : fmt(data.subtotal_3)}
+          />
+          <Row label="Local Charge" value={data.per_kg_mode ? fmt(data.local_charge) + "/kg" : fmt(data.local_charge)} />
+          <Row label="Margin" value={data.per_kg_mode ? fmt(data.margin) + "/kg" : fmt(data.margin)} />
+          {data.per_kg_mode && (
+            <>
+              <Row label="Per-kg Total" value={fmt(data.total_per_kg) + "/kg"} bold />
+              <Row label="× Chargeable Weight" sub={`${data.total_per_kg.toFixed(2)} × ${data.chargeable_weight} kg`} value={fmt(data.total_per_kg * data.chargeable_weight)} />
+            </>
+          )}
+        </div>
+      )}
 
       {/* Total */}
       <div className="px-5 sm:px-6 py-5 bg-slate-900 text-white">
-        <div className="flex items-baseline justify-between gap-3 mb-2">
-          <div className="text-[10px] tracking-[0.3em] uppercase text-white/70">Total Quote</div>
+        <div className="flex items-baseline justify-between gap-3">
+          <div className="text-[10px] tracking-[0.3em] uppercase text-white/70">
+            {data.chargeable_weight > 30 ? "Total Quote (Per KG)" : "Total Quote"}
+          </div>
           <div
             className="font-mono tabular-nums font-bold whitespace-nowrap text-xl sm:text-2xl lg:text-3xl"
             data-testid="ups-breakdown-total"
           >
-            {fmt(data.total)}
+            {data.chargeable_weight > 30
+              ? fmt(data.total / data.chargeable_weight) + " / kg"
+              : fmt(data.total)}
           </div>
         </div>
-        {data.chargeable_weight > 0 && (
-          <div className="flex items-baseline justify-between pt-3 border-t border-slate-700/50 text-slate-300">
-            <div className="text-[10px] tracking-[0.2em] uppercase">Per KG Cost</div>
-            <div className="font-mono tabular-nums text-sm text-yellow-400 font-semibold" data-testid="ups-breakdown-per-kg">
-              {fmt(data.total / data.chargeable_weight)} / kg
+      </div>
+
+      {data.notes?.length > 0 && (
+        <div className="px-5 sm:px-6 py-3 space-y-1.5 bg-slate-50 border-b border-slate-100" data-testid="ups-breakdown-notes">
+          {data.notes.map((n, i) => (
+            <div key={i} className="flex items-start gap-2 text-[11px] text-slate-500 leading-relaxed">
+              <Info className="w-3 h-3 mt-0.5 flex-shrink-0 text-amber-600" />
+              <span>{n}</span>
             </div>
-          </div>
-        )}
+          ))}
+        </div>
+      )}
+
+      <div className="px-5 sm:px-6 py-4 bg-slate-50 border-t border-slate-100" data-testid="general-remarks">
+        <div className="text-[10px] tracking-[0.2em] uppercase font-semibold text-slate-500 mb-2">Remark</div>
+        <ol className="list-decimal list-inside text-[11px] text-slate-600 space-y-1.5 leading-relaxed font-sans">
+          <li>Commercial charges 3540/- extra if any</li>
+          <li>Weight above 24 kgs charge extra approx 3390/- per crtn</li>
+          <li>Oda / remote area charges applicable .</li>
+          <li>Validity of rate one week</li>
+        </ol>
       </div>
 
       {data.notes?.length > 0 && (
