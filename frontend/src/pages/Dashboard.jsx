@@ -37,7 +37,6 @@ import {
 import Breakdown from "../components/Breakdown";
 import FedexBreakdown from "../components/FedexBreakdown";
 import AdminPanel from "../components/AdminPanel";
-import FedexCalculator from "../components/FedexCalculator";
 import SelfBreakdown from "../components/SelfBreakdown";
 import UpsBreakdown from "../components/UpsBreakdown";
 
@@ -60,6 +59,7 @@ export default function Dashboard() {
   const [bothResult, setBothResult] = useState(null); // { dhl, fedex, dhl_error, fedex_error, self_carrier, ups }
   const [selfResult, setSelfResult] = useState(null);
   const [upsResult, setUpsResult] = useState(null);
+  const [fedexResult, setFedexResult] = useState(null);
 
   const [selfPostcode, setSelfPostcode] = useState("");
   const [selfSuburb, setSelfSuburb] = useState("");
@@ -111,33 +111,10 @@ export default function Dashboard() {
     setBothResult(null);
     setSelfResult(null);
     setUpsResult(null);
+    setFedexResult(null);
   };
 
-  const onCalculateDhl = async (e) => {
-    e?.preventDefault();
-    if (!customerName.trim()) return toast.error("Customer name is required");
-    if (!countryCode) return toast.error("Select a destination country");
-    const w = parseFloat(weight);
-    if (!w || w <= 0) return toast.error("Enter a valid weight");
-
-    setCalculating(true);
-    resetResults();
-    try {
-      const res = await api.post("/calculate", {
-        customer_name: customerName.trim(),
-        country_code: countryCode,
-        weight_kg: w,
-        shipment_type: shipmentType,
-      });
-      setResult(res.data);
-    } catch (err) {
-      toast.error(err?.response?.data?.detail || "Failed to calculate");
-    } finally {
-      setCalculating(false);
-    }
-  };
-
-  const onCalculateBoth = async (e) => {
+  const onCalculateUnified = async (e) => {
     e?.preventDefault();
     if (!customerName.trim()) return toast.error("Customer name is required");
     if (!countryCode) return toast.error("Select a destination country");
@@ -147,11 +124,11 @@ export default function Dashboard() {
     if (["AU", "CA", "NZ", "US", "GB"].includes(countryCode.toUpperCase())) {
       if (!selfPostcode?.trim()) {
         const label = countryCode.toUpperCase() === "US" ? "ZIP Code" : countryCode.toUpperCase() === "CA" ? "FSA" : "Postcode";
-        return toast.error(`${label} is required for comparison`);
+        return toast.error(`${label} is required`);
       }
       if (!["CA", "US", "GB"].includes(countryCode.toUpperCase()) && !selfSuburb?.trim()) {
         const label = countryCode.toUpperCase() === "NZ" ? "Town" : "Suburb";
-        return toast.error(`${label} is required for comparison`);
+        return toast.error(`${label} is required`);
       }
     }
 
@@ -165,72 +142,15 @@ export default function Dashboard() {
         shipment_type: shipmentType,
         postcode: selfPostcode?.trim() || null,
         suburb: selfSuburb?.trim() || null,
+        self_service_code: selfServiceCode || null,
       });
       setBothResult(res.data);
+      setResult(res.data.dhl);
+      setFedexResult(res.data.fedex);
+      setSelfResult(res.data.self_carrier);
+      setUpsResult(res.data.ups);
     } catch (err) {
       toast.error(err?.response?.data?.detail || "Failed to calculate");
-    } finally {
-      setCalculating(false);
-    }
-  };
-
-  const onCalculateSelf = async (e) => {
-    e?.preventDefault();
-    if (!customerName.trim()) return toast.error("Customer name is required");
-    if (!countryCode) return toast.error("Select a destination country");
-    const w = parseFloat(weight);
-    if (!w || w <= 0) return toast.error("Enter a valid weight");
-
-    const zoneServices = ["AU ECONOMY", "AU NON FOOD", "NZ ECONOMY", "CA ECONOMY", "CA ECO DUTY PAID", "PREMIUM GROUND", "EXPRESS"];
-    if (zoneServices.includes(selfServiceCode)) {
-      if (!selfPostcode?.trim()) {
-        const label = countryCode.toUpperCase() === "US" ? "ZIP Code" : countryCode.toUpperCase() === "CA" ? "FSA" : "Postcode";
-        return toast.error(`${label} is required`);
-      }
-      if (!["CA", "US", "GB"].includes(countryCode.toUpperCase()) && !selfSuburb?.trim()) {
-        const label = countryCode.toUpperCase() === "NZ" ? "Town" : "Suburb";
-        return toast.error(`${label} is required`);
-      }
-    }
-
-    setCalculating(true);
-    resetResults();
-    try {
-      const res = await api.post("/self/calculate", {
-        customer_name: customerName.trim(),
-        country_code: countryCode,
-        weight_kg: w,
-        service_code: selfServiceCode,
-        postcode: selfPostcode?.trim() || null,
-        suburb: selfSuburb?.trim() || null,
-      });
-      setSelfResult(res.data);
-    } catch (err) {
-      toast.error(err?.response?.data?.detail || "Failed to calculate SELF rate");
-    } finally {
-      setCalculating(false);
-    }
-  };
-
-  const onCalculateUps = async (e) => {
-    e?.preventDefault();
-    if (!customerName.trim()) return toast.error("Customer name is required");
-    if (!countryCode) return toast.error("Select a destination country");
-    const w = parseFloat(weight);
-    if (!w || w <= 0) return toast.error("Enter a valid weight");
-
-    setCalculating(true);
-    resetResults();
-    try {
-      const res = await api.post("/ups/calculate", {
-        customer_name: customerName.trim(),
-        country_code: countryCode,
-        weight_kg: w,
-        shipment_type: shipmentType,
-      });
-      setUpsResult(res.data);
-    } catch (err) {
-      toast.error(err?.response?.data?.detail || "Failed to calculate UPS rate");
     } finally {
       setCalculating(false);
     }
@@ -362,8 +282,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        {((carrier === "self" && ["AU ECONOMY", "AU NON FOOD", "NZ ECONOMY", "CA ECONOMY", "CA ECO DUTY PAID", "PREMIUM GROUND", "EXPRESS"].includes(selfServiceCode)) ||
-          (carrier === "both" && countryCode && ["AU", "CA", "NZ", "US", "GB"].includes(countryCode.toUpperCase()))) && (
+        {countryCode && ["AU", "CA", "NZ", "US", "GB"].includes(countryCode.toUpperCase()) && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label htmlFor="self-postcode" className="text-xs tracking-wider uppercase text-slate-600">
@@ -576,12 +495,25 @@ export default function Dashboard() {
           </button>
         </div>
 
-        {carrier === "fedex" && <FedexCalculator />}
+        {carrier === "fedex" && (
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+            <div className="lg:col-span-2">{renderForm(onCalculateUnified, "Calculate FedEx rate", "bg-purple-700 hover:bg-purple-800")}</div>
+            <div className="lg:col-span-3">
+              {bothResult && <SummaryTable bothResult={bothResult} countryCode={countryCode} weight={weight} />}
+              {fedexResult ? (
+                <FedexBreakdown data={fedexResult} customerName={customerName} />
+              ) : (
+                <EmptyState label="Your FedEx quote will appear here" />
+              )}
+            </div>
+          </div>
+        )}
 
         {carrier === "dhl" && (
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-            <div className="lg:col-span-2">{renderForm(onCalculateDhl, "Calculate DHL rate")}</div>
+            <div className="lg:col-span-2">{renderForm(onCalculateUnified, "Calculate DHL rate")}</div>
             <div className="lg:col-span-3">
+              {bothResult && <SummaryTable bothResult={bothResult} countryCode={countryCode} weight={weight} />}
               {result ? (
                 <Breakdown data={result} customerName={customerName} />
               ) : (
@@ -593,8 +525,9 @@ export default function Dashboard() {
 
         {carrier === "self" && (
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-            <div className="lg:col-span-2">{renderForm(onCalculateSelf, "Calculate SELF rate", "bg-teal-600 hover:bg-teal-700")}</div>
+            <div className="lg:col-span-2">{renderForm(onCalculateUnified, "Calculate SELF rate", "bg-teal-600 hover:bg-teal-700")}</div>
             <div className="lg:col-span-3">
+              {bothResult && <SummaryTable bothResult={bothResult} countryCode={countryCode} weight={weight} />}
               {selfResult ? (
                 <SelfBreakdown data={selfResult} customerName={customerName} />
               ) : (
@@ -606,8 +539,9 @@ export default function Dashboard() {
 
         {carrier === "ups" && (
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-            <div className="lg:col-span-2">{renderForm(onCalculateUps, "Calculate UPS rate", "bg-amber-800 hover:bg-amber-900")}</div>
+            <div className="lg:col-span-2">{renderForm(onCalculateUnified, "Calculate UPS rate", "bg-amber-800 hover:bg-amber-900")}</div>
             <div className="lg:col-span-3">
+              {bothResult && <SummaryTable bothResult={bothResult} countryCode={countryCode} weight={weight} />}
               {upsResult ? (
                 <UpsBreakdown data={upsResult} customerName={customerName} />
               ) : (
@@ -668,6 +602,109 @@ export default function Dashboard() {
       </main>
 
       {isAdmin && <AdminPanel open={adminOpen} onOpenChange={setAdminOpen} countries={countries} onSettingsSaved={resetResults} />}
+    </div>
+  );
+}
+
+function SummaryTable({ bothResult, countryCode, weight }) {
+  if (!bothResult) return null;
+
+  const fmt = (n) => {
+    if (n === undefined || n === null) return "-";
+    return Number(n).toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  };
+
+  const getValidityDateStr = () => {
+    const d = new Date();
+    d.setDate(d.getDate() + 7);
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    return `${dd}.${mm}.${yyyy}`;
+  };
+
+  const validityDate = getValidityDateStr();
+  const chargeableWeight = bothResult.dhl?.chargeable_weight || weight;
+
+  const rows = [
+    {
+      name: "DHL",
+      rate: bothResult.dhl?.total,
+      validity: validityDate,
+    },
+    {
+      name: "FEDEX",
+      rate: bothResult.fedex?.total,
+      validity: validityDate,
+    },
+    {
+      name: "UPS(INEXT )",
+      rate: bothResult.ups?.total,
+      validity: validityDate,
+    },
+    {
+      name: "SELF*",
+      rate: bothResult.self_carrier?.total,
+      validity: "(LATE DELIVERY )",
+    },
+    {
+      name: "ARAMEX",
+      rate: 0,
+      validity: validityDate,
+    }
+  ];
+
+  const headerLabel = `${(countryCode || "").toUpperCase()}-${chargeableWeight} KGS`;
+
+  return (
+    <div className="mb-6 rounded-md bg-white border border-slate-200 shadow-sm overflow-hidden p-5 space-y-4">
+      <div className="overflow-x-auto">
+        <table className="min-w-full border-collapse border border-slate-300 text-sm">
+          <thead>
+            <tr className="bg-slate-100 font-semibold text-slate-800 text-left">
+              <th className="border border-slate-300 px-4 py-2 uppercase tracking-wider">{headerLabel}</th>
+              <th className="border border-slate-300 px-4 py-2 uppercase tracking-wider text-center">rate</th>
+              <th className="border border-slate-300 px-4 py-2 uppercase tracking-wider text-center">validity of rate</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-200 font-mono text-slate-700">
+            {rows.map((row) => {
+              let displayRate = "-";
+              if (row.rate !== undefined && row.rate !== null && row.rate > 0) {
+                if (chargeableWeight > 30) {
+                  displayRate = fmt(row.rate / chargeableWeight);
+                } else {
+                  displayRate = fmt(row.rate);
+                }
+              } else if (row.name === "ARAMEX") {
+                displayRate = "0";
+              }
+
+              const isUps = row.name.startsWith("UPS");
+              const isSelf = row.name.startsWith("SELF");
+              
+              const nameClass = isUps || isSelf ? "text-red-600 font-semibold" : "font-semibold text-slate-900";
+              const rateClass = isUps || isSelf ? "text-red-600 font-bold text-center" : "font-bold text-slate-900 text-center";
+              const valClass = isUps || isSelf ? "text-red-600 text-center" : "text-slate-500 text-center";
+
+              return (
+                <tr key={row.name} className="hover:bg-slate-50">
+                  <td className={`border border-slate-300 px-4 py-2 ${nameClass}`}>{row.name}</td>
+                  <td className={`border border-slate-300 px-4 py-2 ${rateClass}`}>{displayRate}</td>
+                  <td className={`border border-slate-300 px-4 py-2 ${valClass}`}>{row.validity}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      
+      {/* Remarks Section */}
+      <div className="pt-2 text-xs uppercase font-sans tracking-wide leading-relaxed space-y-1.5 border-t border-slate-100">
+        <div className="text-red-600 font-semibold">PERCEL MORE THAN -24 KGS WILL CHARGE EXTRA 3540/- PER CRTN</div>
+        <div className="text-slate-700 font-semibold">CUSTOM - 3540/- PER SHIPMENT IF ANY</div>
+        <div className="text-red-600 font-semibold">FOR GULF - RS. 4680/- EXTRA BY DHL</div>
+      </div>
     </div>
   );
 }

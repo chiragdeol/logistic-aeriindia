@@ -1427,6 +1427,7 @@ class BothCalcRequest(BaseModel):
     height_cm: Optional[float] = None
     postcode: Optional[str] = None
     suburb: Optional[str] = None
+    self_service_code: Optional[str] = None
 
 
 class BothRateResponse(BaseModel):
@@ -1491,27 +1492,28 @@ async def calculate_both(req: BothCalcRequest, user: dict = Depends(get_current_
     try:
         # Determine service code
         cc = req.country_code.upper().strip()
-        service_code = None
-        if cc == "AU":
-            service_code = "AU NON FOOD" if req.shipment_type == "document" else "AU ECONOMY"
-        elif cc == "NZ":
-            service_code = "NZ ECONOMY"
-        elif cc == "CA":
-            service_code = "CA ECONOMY"
-        elif cc == "US":
-            service_code = "PREMIUM GROUND"
-        elif cc == "GB":
-            service_code = "EXPRESS"
-        else:
-            # find first matching service in self rates
-            entries = _resolve_self_entries(cc)
-            if entries:
-                # prefer 'SELF', otherwise use first
-                sc_list = [e["service_code"] for e in entries]
-                if "SELF" in sc_list:
-                    service_code = "SELF"
-                else:
-                    service_code = sc_list[0]
+        service_code = req.self_service_code
+        if not service_code:
+            if cc == "AU":
+                service_code = "AU NON FOOD" if req.shipment_type == "document" else "AU ECONOMY"
+            elif cc == "NZ":
+                service_code = "NZ ECONOMY"
+            elif cc == "CA":
+                service_code = "CA ECONOMY"
+            elif cc == "US":
+                service_code = "PREMIUM GROUND"
+            elif cc == "GB":
+                service_code = "EXPRESS"
+            else:
+                # find first matching service in self rates
+                entries = _resolve_self_entries(cc)
+                if entries:
+                    # prefer 'SELF', otherwise use first
+                    sc_list = [e["service_code"] for e in entries]
+                    if "SELF" in sc_list:
+                        service_code = "SELF"
+                    else:
+                        service_code = sc_list[0]
                     
         if not service_code:
             resp.self_error = "No matching SELF service for this country"
