@@ -653,40 +653,24 @@ function SummaryTable({ bothResult, countryCode, weight }) {
       </div>
       
       {/* Remarks Section */}
-      <div className="px-6 py-5 bg-slate-50 border-t border-slate-200/60 text-xs tracking-wider leading-relaxed space-y-3 font-sans">
+      <div className="px-6 py-5 bg-slate-50 border-t border-slate-200/60 text-xs tracking-wider leading-relaxed space-y-3 font-sans font-semibold">
         <div className="text-[10px] tracking-[0.2em] uppercase font-bold text-slate-500 mb-2">Remarks & Guidelines</div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2 font-semibold">
-            <div className="flex items-start gap-2 text-slate-700">
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 flex-shrink-0" />
-              <span>1. Commercial charges 3540/- extra if any</span>
-            </div>
-            <div className="flex items-start gap-2 text-red-600 font-bold">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-600 mt-1.5 flex-shrink-0" />
-              <span>2. Weight above 24 kgs charge extra approx 3390/- per crtn</span>
-            </div>
-            <div className="flex items-start gap-2 text-slate-700">
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 flex-shrink-0" />
-              <span>3. Oda / remote area charges applicable .</span>
-            </div>
-            <div className="flex items-start gap-2 text-slate-700">
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 flex-shrink-0" />
-              <span>4. Validity of rate one week</span>
-            </div>
+        <div className="space-y-2.5">
+          <div className="flex items-start gap-2 text-slate-700">
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 flex-shrink-0" />
+            <span>Validity of rate one week</span>
           </div>
-          <div className="space-y-2 font-semibold border-t md:border-t-0 md:border-l border-slate-200/80 pt-3 md:pt-0 md:pl-4">
-            <div className="flex items-start gap-2 text-red-600 font-bold">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-600 mt-1.5 flex-shrink-0" />
-              <span>PERCEL MORE THAN -24 KGS WILL CHARGE EXTRA 3540/- PER CRTN</span>
-            </div>
-            <div className="flex items-start gap-2 text-slate-700">
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 flex-shrink-0" />
-              <span>CUSTOM - 3540/- PER SHIPMENT IF ANY</span>
-            </div>
-            <div className="flex items-start gap-2 text-red-600 font-bold">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-600 mt-1.5 flex-shrink-0" />
-              <span>FOR GULF - RS. 4680/- EXTRA BY DHL</span>
-            </div>
+          <div className="flex items-start gap-2 text-red-600 font-bold">
+            <span className="w-1.5 h-1.5 rounded-full bg-red-600 mt-1.5 flex-shrink-0" />
+            <span>PERCEL MORE THAN -24 KGS WILL CHARGE EXTRA 3540/- PER CRTN</span>
+          </div>
+          <div className="flex items-start gap-2 text-slate-700">
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 flex-shrink-0" />
+            <span>CUSTOM - 3540/- PER SHIPMENT IF ANY</span>
+          </div>
+          <div className="flex items-start gap-2 text-red-600 font-bold">
+            <span className="w-1.5 h-1.5 rounded-full bg-red-600 mt-1.5 flex-shrink-0" />
+            <span>FOR GULF - RS. 4680/- EXTRA BY DHL</span>
           </div>
         </div>
       </div>
