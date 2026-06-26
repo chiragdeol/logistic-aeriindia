@@ -34,11 +34,7 @@ import {
   Layers,
   ShieldCheck,
 } from "lucide-react";
-import Breakdown from "../components/Breakdown";
-import FedexBreakdown from "../components/FedexBreakdown";
 import AdminPanel from "../components/AdminPanel";
-import SelfBreakdown from "../components/SelfBreakdown";
-import UpsBreakdown from "../components/UpsBreakdown";
 
 const cn = (...a) => a.filter(Boolean).join(" ");
 
@@ -455,9 +451,8 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
             <div className="lg:col-span-2">{renderForm(onCalculateUnified, "Calculate FedEx rate", "bg-purple-700 hover:bg-purple-800")}</div>
             <div className="lg:col-span-3">
-              {bothResult && <SummaryTable bothResult={bothResult} countryCode={countryCode} weight={weight} />}
-              {fedexResult ? (
-                <FedexBreakdown data={fedexResult} customerName={customerName} />
+              {bothResult ? (
+                <SummaryTable bothResult={bothResult} countryCode={countryCode} weight={weight} />
               ) : (
                 <EmptyState label="Your FedEx quote will appear here" />
               )}
@@ -469,9 +464,8 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
             <div className="lg:col-span-2">{renderForm(onCalculateUnified, "Calculate DHL rate")}</div>
             <div className="lg:col-span-3">
-              {bothResult && <SummaryTable bothResult={bothResult} countryCode={countryCode} weight={weight} />}
-              {result ? (
-                <Breakdown data={result} customerName={customerName} />
+              {bothResult ? (
+                <SummaryTable bothResult={bothResult} countryCode={countryCode} weight={weight} />
               ) : (
                 <EmptyState label="Your DHL quote will appear here" />
               )}
@@ -483,9 +477,8 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
             <div className="lg:col-span-2">{renderForm(onCalculateUnified, "Calculate SELF rate", "bg-teal-600 hover:bg-teal-700")}</div>
             <div className="lg:col-span-3">
-              {bothResult && <SummaryTable bothResult={bothResult} countryCode={countryCode} weight={weight} />}
-              {selfResult ? (
-                <SelfBreakdown data={selfResult} customerName={customerName} />
+              {bothResult ? (
+                <SummaryTable bothResult={bothResult} countryCode={countryCode} weight={weight} />
               ) : (
                 <EmptyState label="Your SELF quote will appear here" />
               )}
@@ -497,9 +490,8 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
             <div className="lg:col-span-2">{renderForm(onCalculateUnified, "Calculate UPS rate", "bg-amber-800 hover:bg-amber-900")}</div>
             <div className="lg:col-span-3">
-              {bothResult && <SummaryTable bothResult={bothResult} countryCode={countryCode} weight={weight} />}
-              {upsResult ? (
-                <UpsBreakdown data={upsResult} customerName={customerName} />
+              {bothResult ? (
+                <SummaryTable bothResult={bothResult} countryCode={countryCode} weight={weight} />
               ) : (
                 <EmptyState label="Your UPS quote will appear here" />
               )}
@@ -508,50 +500,16 @@ export default function Dashboard() {
         )}
 
         {carrier === "both" && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-              <div className="lg:col-span-2">
-                {renderForm(onCalculateBoth, "Compare All Carriers", "bg-slate-900 hover:bg-slate-800")}
-              </div>
-              <div className="lg:col-span-3">
-                {!bothResult ? (
-                  <EmptyState label="All carrier quotes will appear side-by-side" />
-                ) : (
-                  <div className="space-y-4">
-                    {/* <ComparisonBar bothResult={bothResult} /> */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4" data-testid="both-results">
-                      <div>
-                        {bothResult.dhl ? (
-                          <Breakdown data={bothResult.dhl} customerName={bothResult.customer_name} />
-                        ) : (
-                          <ErrorCard carrier="DHL" message={bothResult.dhl_error || "Not available"} accent="bg-yellow-400 text-slate-900" />
-                        )}
-                      </div>
-                      <div>
-                        {bothResult.fedex ? (
-                          <FedexBreakdown data={bothResult.fedex} customerName={bothResult.customer_name} />
-                        ) : (
-                          <ErrorCard carrier="FedEx" message={bothResult.fedex_error || "Not available"} accent="bg-purple-700 text-white" />
-                        )}
-                      </div>
-                      <div>
-                        {bothResult.self_carrier ? (
-                          <SelfBreakdown data={bothResult.self_carrier} customerName={bothResult.customer_name} />
-                        ) : (
-                          <ErrorCard carrier="SELF" message={bothResult.self_error || "Not available"} accent="bg-teal-600 text-white" />
-                        )}
-                      </div>
-                      <div>
-                        {bothResult.ups ? (
-                          <UpsBreakdown data={bothResult.ups} customerName={bothResult.customer_name} />
-                        ) : (
-                          <ErrorCard carrier="UPS" message={bothResult.ups_error || "Not available"} accent="bg-amber-800 text-white" />
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+            <div className="lg:col-span-2">
+              {renderForm(onCalculateUnified, "Compare All Carriers", "bg-slate-900 hover:bg-slate-800")}
+            </div>
+            <div className="lg:col-span-3">
+              {bothResult ? (
+                <SummaryTable bothResult={bothResult} countryCode={countryCode} weight={weight} />
+              ) : (
+                <EmptyState label="All carrier quotes will appear here" />
+              )}
             </div>
           </div>
         )}
@@ -567,7 +525,7 @@ function SummaryTable({ bothResult, countryCode, weight }) {
 
   const fmt = (n) => {
     if (n === undefined || n === null) return "-";
-    return Number(n).toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    return "₹" + Number(n).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
 
   const getValidityDateStr = () => {
@@ -580,86 +538,157 @@ function SummaryTable({ bothResult, countryCode, weight }) {
   };
 
   const validityDate = getValidityDateStr();
-  const chargeableWeight = bothResult.dhl?.chargeable_weight || weight;
+  const dhlData = bothResult.dhl;
+  
+  const countryName = dhlData?.country?.name || bothResult.fedex?.country?.name || bothResult.self_carrier?.country?.name || bothResult.ups?.country?.name || "Destination";
+  const actualWeight = dhlData?.actual_weight || bothResult.fedex?.actual_weight || bothResult.self_carrier?.actual_weight || bothResult.ups?.actual_weight || weight;
+  const volumetricWeight = dhlData?.volumetric_weight || bothResult.fedex?.volumetric_weight || bothResult.self_carrier?.volumetric_weight || bothResult.ups?.volumetric_weight || 0;
+  const chargeableWeight = dhlData?.chargeable_weight || bothResult.fedex?.chargeable_weight || bothResult.self_carrier?.chargeable_weight || bothResult.ups?.chargeable_weight || weight;
+  const customer = bothResult.customer_name || "Customer";
+  
+  const isDoc = dhlData?.shipment_type === "document" || bothResult.fedex?.service === "envelope" || bothResult.ups?.shipment_type === "document";
 
   const rows = [
     {
       name: "DHL",
-      rate: bothResult.dhl?.total,
+      rate: dhlData?.total,
       validity: validityDate,
+      logoColor: "bg-yellow-400 text-slate-900 border-yellow-500",
     },
     {
       name: "FEDEX",
       rate: bothResult.fedex?.total,
       validity: validityDate,
+      logoColor: "bg-purple-700 text-white border-purple-800",
     },
     {
       name: "UPS(INEXT )",
       rate: bothResult.ups?.total,
       validity: validityDate,
+      logoColor: "bg-amber-800 text-white border-amber-900",
     },
     {
       name: "SELF*",
       rate: bothResult.self_carrier?.total,
       validity: "(LATE DELIVERY )",
-    },
-    {
-      name: "ARAMEX",
-      rate: 0,
-      validity: validityDate,
+      logoColor: "bg-teal-600 text-white border-teal-700",
     }
   ];
 
   const headerLabel = `${(countryCode || "").toUpperCase()}-${chargeableWeight} KGS`;
 
   return (
-    <div className="mb-6 rounded-md bg-white border border-slate-200 shadow-sm overflow-hidden p-5 space-y-4">
-      <div className="overflow-x-auto">
-        <table className="min-w-full border-collapse border border-slate-300 text-sm">
-          <thead>
-            <tr className="bg-slate-100 font-semibold text-slate-800 text-left">
-              <th className="border border-slate-300 px-4 py-2 uppercase tracking-wider">{headerLabel}</th>
-              <th className="border border-slate-300 px-4 py-2 uppercase tracking-wider text-center">rate</th>
-              <th className="border border-slate-300 px-4 py-2 uppercase tracking-wider text-center">validity of rate</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200 font-mono text-slate-700">
-            {rows.map((row) => {
-              let displayRate = "-";
-              if (row.rate !== undefined && row.rate !== null && row.rate > 0) {
-                if (chargeableWeight > 30) {
-                  displayRate = fmt(row.rate / chargeableWeight);
-                } else {
-                  displayRate = fmt(row.rate);
+    <div className="rounded-md bg-white border border-slate-200 shadow-md overflow-hidden animate-in fade-in duration-300" data-testid="summary-rate-card">
+      {/* Top Banner with main details */}
+      <div className="px-6 py-5 bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800">
+        <div>
+          <div className="text-[10px] tracking-[0.25em] uppercase text-slate-400">Shipment Quote Summary</div>
+          <div className="font-display text-xl font-bold mt-1 text-white flex items-center gap-2">
+            <span>{customer}</span>
+            <span className="text-slate-500 font-normal">to</span>
+            <span className="text-yellow-400">{countryName}</span>
+          </div>
+          <div className="flex items-center gap-3 text-xs text-slate-400 mt-2 font-mono">
+            <span>Actual: {actualWeight} kg</span>
+            <span>·</span>
+            <span>Volumetric: {volumetricWeight} kg</span>
+            <span>·</span>
+            <span className="text-yellow-400 font-semibold">Chargeable: {chargeableWeight} kg</span>
+            <span>·</span>
+            <span>{isDoc ? "Document" : "Non-Doc"}</span>
+          </div>
+        </div>
+        <div className="bg-slate-800 border border-slate-700 px-4 py-2.5 rounded-sm text-center sm:text-right flex-shrink-0">
+          <div className="text-[9px] tracking-[0.2em] uppercase text-slate-400">Destination & Weight</div>
+          <div className="font-mono font-bold text-lg text-yellow-400 mt-0.5">{headerLabel}</div>
+        </div>
+      </div>
+
+      {/* Table Rates */}
+      <div className="px-6 py-4">
+        <div className="overflow-x-auto">
+          <table className="min-w-full border-collapse border border-slate-100 text-sm">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-100 text-left">
+                <th className="px-4 py-3 text-[10px] tracking-[0.2em] uppercase font-bold text-slate-500">Carrier</th>
+                <th className="px-4 py-3 text-[10px] tracking-[0.2em] uppercase font-bold text-slate-500 text-right">rate</th>
+                <th className="px-4 py-3 text-[10px] tracking-[0.2em] uppercase font-bold text-slate-500 text-center">validity of rate</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 font-mono">
+              {rows.map((row) => {
+                let displayRate = "-";
+                if (row.rate !== undefined && row.rate !== null && row.rate > 0) {
+                  if (chargeableWeight > 30) {
+                    displayRate = fmt(row.rate / chargeableWeight) + " / kg";
+                  } else {
+                    displayRate = fmt(row.rate);
+                  }
                 }
-              } else if (row.name === "ARAMEX") {
-                displayRate = "0";
-              }
 
-              const isUps = row.name.startsWith("UPS");
-              const isSelf = row.name.startsWith("SELF");
-              
-              const nameClass = isUps || isSelf ? "text-red-600 font-semibold" : "font-semibold text-slate-900";
-              const rateClass = isUps || isSelf ? "text-red-600 font-bold text-center" : "font-bold text-slate-900 text-center";
-              const valClass = isUps || isSelf ? "text-red-600 text-center" : "text-slate-500 text-center";
+                const isUps = row.name.startsWith("UPS");
+                const isSelf = row.name.startsWith("SELF");
+                
+                const nameClass = isUps || isSelf ? "text-red-600 font-bold" : "font-bold text-slate-900";
+                const rateClass = isUps || isSelf ? "text-red-600 font-bold text-right text-base" : "font-bold text-slate-900 text-right text-base";
+                const valClass = isUps || isSelf ? "text-red-600 font-semibold text-center text-xs" : "text-slate-500 text-center text-xs";
+                const rowBg = isUps || isSelf ? "bg-red-50/30 hover:bg-red-50/50" : "hover:bg-slate-50/80";
 
-              return (
-                <tr key={row.name} className="hover:bg-slate-50">
-                  <td className={`border border-slate-300 px-4 py-2 ${nameClass}`}>{row.name}</td>
-                  <td className={`border border-slate-300 px-4 py-2 ${rateClass}`}>{displayRate}</td>
-                  <td className={`border border-slate-300 px-4 py-2 ${valClass}`}>{row.validity}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                return (
+                  <tr key={row.name} className={`${rowBg} transition-colors`}>
+                    <td className="px-4 py-3.5 flex items-center gap-3">
+                      <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-[9px] font-bold border ${row.logoColor}`}>
+                        {row.name.substring(0, 2)}
+                      </span>
+                      <span className={nameClass}>{row.name}</span>
+                    </td>
+                    <td className={`px-4 py-3.5 ${rateClass}`}>{displayRate}</td>
+                    <td className={`px-4 py-3.5 ${valClass}`}>{row.validity}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
       
       {/* Remarks Section */}
-      <div className="pt-2 text-xs uppercase font-sans tracking-wide leading-relaxed space-y-1.5 border-t border-slate-100">
-        <div className="text-red-600 font-semibold">PERCEL MORE THAN -24 KGS WILL CHARGE EXTRA 3540/- PER CRTN</div>
-        <div className="text-slate-700 font-semibold">CUSTOM - 3540/- PER SHIPMENT IF ANY</div>
-        <div className="text-red-600 font-semibold">FOR GULF - RS. 4680/- EXTRA BY DHL</div>
+      <div className="px-6 py-5 bg-slate-50 border-t border-slate-200/60 text-xs tracking-wider leading-relaxed space-y-3 font-sans">
+        <div className="text-[10px] tracking-[0.2em] uppercase font-bold text-slate-500 mb-2">Remarks & Guidelines</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2 font-semibold">
+            <div className="flex items-start gap-2 text-slate-700">
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 flex-shrink-0" />
+              <span>1. Commercial charges 3540/- extra if any</span>
+            </div>
+            <div className="flex items-start gap-2 text-red-600 font-bold">
+              <span className="w-1.5 h-1.5 rounded-full bg-red-600 mt-1.5 flex-shrink-0" />
+              <span>2. Weight above 24 kgs charge extra approx 3390/- per crtn</span>
+            </div>
+            <div className="flex items-start gap-2 text-slate-700">
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 flex-shrink-0" />
+              <span>3. Oda / remote area charges applicable .</span>
+            </div>
+            <div className="flex items-start gap-2 text-slate-700">
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 flex-shrink-0" />
+              <span>4. Validity of rate one week</span>
+            </div>
+          </div>
+          <div className="space-y-2 font-semibold border-t md:border-t-0 md:border-l border-slate-200/80 pt-3 md:pt-0 md:pl-4">
+            <div className="flex items-start gap-2 text-red-600 font-bold">
+              <span className="w-1.5 h-1.5 rounded-full bg-red-600 mt-1.5 flex-shrink-0" />
+              <span>PERCEL MORE THAN -24 KGS WILL CHARGE EXTRA 3540/- PER CRTN</span>
+            </div>
+            <div className="flex items-start gap-2 text-slate-700">
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 flex-shrink-0" />
+              <span>CUSTOM - 3540/- PER SHIPMENT IF ANY</span>
+            </div>
+            <div className="flex items-start gap-2 text-red-600 font-bold">
+              <span className="w-1.5 h-1.5 rounded-full bg-red-600 mt-1.5 flex-shrink-0" />
+              <span>FOR GULF - RS. 4680/- EXTRA BY DHL</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
