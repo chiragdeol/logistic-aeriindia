@@ -552,24 +552,28 @@ function SummaryTable({ bothResult, countryCode, weight }) {
     {
       name: "DHL",
       rate: dhlData?.total,
+      perKgRate: dhlData?.total_per_kg,
       validity: validityDate,
       logoColor: "bg-yellow-400 text-slate-900 border-yellow-500",
     },
     {
       name: "FEDEX",
       rate: bothResult.fedex?.total,
+      perKgRate: bothResult.fedex?.total_per_kg,
       validity: validityDate,
       logoColor: "bg-purple-700 text-white border-purple-800",
     },
     {
       name: "UPS(INEXT )",
       rate: bothResult.ups?.total,
+      perKgRate: bothResult.ups?.total_per_kg,
       validity: validityDate,
       logoColor: "bg-amber-800 text-white border-amber-900",
     },
     {
       name: "SELF*",
       rate: bothResult.self_carrier?.total,
+      perKgRate: bothResult.self_carrier?.total_per_kg,
       validity: "(LATE DELIVERY )",
       logoColor: "bg-teal-600 text-white border-teal-700",
     }
@@ -620,7 +624,7 @@ function SummaryTable({ bothResult, countryCode, weight }) {
                 let displayRate = "-";
                 if (row.rate !== undefined && row.rate !== null && row.rate > 0) {
                   if (chargeableWeight > 30) {
-                    displayRate = fmt(row.rate / chargeableWeight) + " / kg";
+                    displayRate = fmt(row.perKgRate ?? (row.rate / chargeableWeight)) + " / kg";
                   } else {
                     displayRate = fmt(row.rate);
                   }

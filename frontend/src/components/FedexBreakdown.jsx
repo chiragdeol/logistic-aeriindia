@@ -114,7 +114,7 @@ export default function FedexBreakdown({ data, customerName }) {
             data-testid="fedex-breakdown-total"
           >
             {data.chargeable_weight > 30
-              ? fmt(data.total / data.chargeable_weight) + " / kg"
+              ? fmt(data.total_per_kg ?? (data.total / data.chargeable_weight)) + " / kg"
               : fmt(data.total)}
           </div>
         </div>
