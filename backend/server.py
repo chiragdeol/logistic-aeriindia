@@ -1235,7 +1235,9 @@ def _resolve_ups_column(country_name: str, country_code: str) -> int:
     if matched_zone:
         for col_key, names_list in columns_map.items():
             for name in names_list:
-                if matched_zone.upper() == name.upper():
+                z_name_norm = matched_zone.replace("-", " ").replace(" ", "").upper()
+                c_name_norm = name.replace("-", " ").replace(" ", "").upper()
+                if z_name_norm == c_name_norm:
                     return int(col_key)
                     
     return 1

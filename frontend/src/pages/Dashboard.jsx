@@ -356,7 +356,7 @@ export default function Dashboard() {
               <Plane className="w-4 h-4" />
             </div>
             <div>
-              <div className="font-display text-base text-slate-900 leading-none">AERI · Rate Calculator</div>
+              <div className="font-display text-base text-slate-900 leading-none">Aeriindia Calculator</div>
               <div className="text-[10px] tracking-[0.3em] uppercase text-slate-500 mt-0.5">DHL · FedEx · 2026</div>
             </div>
           </div>
