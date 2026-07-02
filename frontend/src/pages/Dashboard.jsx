@@ -534,7 +534,9 @@ function SummaryTable({ bothResult, countryCode, weight }) {
 
   const getValidityDateStr = () => {
     const d = new Date();
-    d.setDate(d.getDate() + 7);
+    const day = d.getDay();
+    const daysToSaturday = (6 - day + 7) % 7;
+    d.setDate(d.getDate() + daysToSaturday);
     const dd = String(d.getDate()).padStart(2, '0');
     const mm = String(d.getMonth() + 1).padStart(2, '0');
     const yyyy = d.getFullYear();
@@ -606,7 +608,7 @@ function SummaryTable({ bothResult, countryCode, weight }) {
     });
     
     text += `\n*Remarks & Guidelines:*\n`;
-    text += `• Validity of rate one week\n`;
+    text += `• Rate validity is from Monday to Saturday (price changes every Sunday)\n`;
     text += `• PARCEL MORE THAN 24 KGS WILL CHARGE EXTRA 3540/- PER CRTN\n`;
     text += `• CUSTOM - 3540/- PER SHIPMENT IF ANY\n`;
     text += `• FOR GULF - RS. 4680/- EXTRA BY DHL\n\n`;
@@ -712,7 +714,7 @@ function SummaryTable({ bothResult, countryCode, weight }) {
           <div class="remarks">
             <h3>Remarks & Guidelines</h3>
             <ul class="remarks-list">
-              <li class="remarks-item">Validity of rate one week</li>
+              <li class="remarks-item">Rate validity is from Monday to Saturday (price changes every Sunday)</li>
               <li class="remarks-item highlight">PERCEL MORE THAN -24 KGS WILL CHARGE EXTRA 3540/- PER CRTN</li>
               <li class="remarks-item">CUSTOM - 3540/- PER SHIPMENT IF ANY</li>
               <li class="remarks-item highlight">FOR GULF - RS. 4680/- EXTRA BY DHL</li>
@@ -833,7 +835,7 @@ function SummaryTable({ bothResult, countryCode, weight }) {
         <div className="space-y-2.5">
           <div className="flex items-start gap-2 text-slate-700">
             <span className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 flex-shrink-0" />
-            <span>Validity of rate one week</span>
+            <span>Rate validity is from Monday to Saturday (price changes every Sunday)</span>
           </div>
           <div className="flex items-start gap-2 text-red-600 font-bold">
             <span className="w-1.5 h-1.5 rounded-full bg-red-600 mt-1.5 flex-shrink-0" />

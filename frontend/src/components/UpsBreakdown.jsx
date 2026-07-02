@@ -119,7 +119,7 @@ export default function UpsBreakdown({ data, customerName }) {
           <li>Commercial charges 3540/- extra if any</li>
           <li>Weight above 24 kgs charge extra approx 3390/- per crtn</li>
           <li>Oda / remote area charges applicable .</li>
-          <li>Validity of rate one week</li>
+          <li>Rate validity is from Monday to Saturday (price changes every Sunday)</li>
         </ol>
       </div>
 
