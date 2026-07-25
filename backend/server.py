@@ -172,7 +172,7 @@ class RateBreakdown(BaseModel):
 class Settings(BaseModel):
     # DHL — new formula model
     ess_per_kg: float = 30.0                   # ESS = ess_per_kg × weight (≤ 30 kg). Above 30 kg, ESS is rolled into per-kg base rate.
-    fuel_surcharge_pct: float = 47.75
+    fuel_surcharge_pct: float = 38.5
     gst_pct: float = 18.0
     local_min_charge: float = 120.0            # local up to local_threshold_kg
     local_per_kg: float = 12.0                 # local = max(min, per_kg × weight)
@@ -186,7 +186,7 @@ class Settings(BaseModel):
     # FedEx (admin-configurable defaults; some fields editable per-quote on the form)
     fedex_ess_rate: float = 94.0          # ADD-ESS rate (now per kg)
     fedex_ess_qty: float = 15.0           # default qty multiplier (deprecated)
-    fedex_fuel_surcharge_pct: float = 46.5
+    fedex_fuel_surcharge_pct: float = 39.75
     fedex_gst_pct: float = 18.0
     fedex_local_charge: float = 180.0     # flat local charge (deprecated)
     fedex_local_per_kg: float = 12.0      # local charge per kg
@@ -202,7 +202,7 @@ class Settings(BaseModel):
     self_margin_per_kg_over_threshold: float = 30.0
     self_margin_threshold_kg: float = 30.0
     # UPS defaults
-    ups_fuel_surcharge_pct: float = 50.25
+    ups_fuel_surcharge_pct: float = 40.5
     ups_gst_pct: float = 18.0
     ups_local_per_kg: float = 12.0
     ups_margin: float = 1500.0
@@ -433,6 +433,12 @@ async def seed_settings():
     existing = await db.settings.find_one({"_key": "global"}, {"_id": 0, "_key": 0}) or {}
     valid_keys = set(Settings.model_fields.keys())
     cleaned = {k: v for k, v in existing.items() if k in valid_keys}
+    
+    # Force update weekly fuel surcharges
+    cleaned["fuel_surcharge_pct"] = 38.5
+    cleaned["fedex_fuel_surcharge_pct"] = 39.75
+    cleaned["ups_fuel_surcharge_pct"] = 40.5
+    
     merged = {**Settings(**cleaned).model_dump()}  # fills defaults for missing keys
     merged["_key"] = "global"
     await db.settings.replace_one({"_key": "global"}, merged, upsert=True)
@@ -600,7 +606,7 @@ async def calculate(req: CalcRequest, user: dict = Depends(get_current_user)):
         margin_pk = round(settings.margin_per_kg_over_threshold, 2)
         total_pk = round(subtotal_3_pk + local_pk + margin_pk, 2)
         
-        total = round(total_pk * rounded + heavy_surcharge + gulf_extra, 2)
+        total = round(total_pk * rounded, 2)
         
         base = base_pk
         ess = ess_pk
@@ -618,7 +624,7 @@ async def calculate(req: CalcRequest, user: dict = Depends(get_current_user)):
         per_kg_mode = False
         total_per_kg = None
         ess = round(settings.ess_per_kg * rounded, 2)
-        subtotal_1 = round(base + heavy_surcharge + gulf_extra + ess, 2)
+        subtotal_1 = round(base + ess, 2)
         fuel = round(subtotal_1 * settings.fuel_surcharge_pct / 100.0, 2)
         subtotal_2 = round(subtotal_1 + fuel, 2)
         gst = round(subtotal_2 * settings.gst_pct / 100.0, 2)

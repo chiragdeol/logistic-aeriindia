@@ -68,7 +68,7 @@ class TestSettings:
         assert r.status_code == 200
         s = r.json()
         assert s["ess_per_kg"] == 30.0
-        assert s["fuel_surcharge_pct"] == 47.75
+        assert s["fuel_surcharge_pct"] == 38.5
         assert s["gst_pct"] == 18.0
         assert s["margin_flat"] == 1500.0
 
@@ -193,7 +193,7 @@ class TestFedexSettings:
         # FedEx defaults
         assert s["fedex_ess_rate"] == 94.0
         assert s["fedex_ess_qty"] == 15.0
-        assert s["fedex_fuel_surcharge_pct"] == 46.5
+        assert s["fedex_fuel_surcharge_pct"] == 39.75
         assert s["fedex_local_charge"] == 180.0
         assert s["fedex_local_per_kg"] == 12.0
         assert s["fedex_margin"] == 1500.0
@@ -233,7 +233,7 @@ class TestFedexCalculate:
         assert d["ess_rate"] == 132.0
         assert d["ess_qty"] == 15.0
         assert d["margin"] == 1500.0
-        assert d["fuel_surcharge_pct"] == 46.5
+        assert d["fuel_surcharge_pct"] == 39.75
 
     def test_fedex_uk_envelope(self, auth_headers):
         r = requests.post(f"{API}/fedex/calculate", headers=auth_headers, json={
